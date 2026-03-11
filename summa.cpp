@@ -39,7 +39,6 @@ int *generate_array(unsigned int n, default_random_engine& rng){
     return ptr;
 }
 
-
 bool sum_sqr(int ptr[],unsigned size, int m){
     for(unsigned i=0; i<size-1; ++i){
         for(unsigned j=i+1; j<size; ++j){
