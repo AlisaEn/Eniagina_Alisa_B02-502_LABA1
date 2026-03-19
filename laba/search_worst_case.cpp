@@ -35,6 +35,9 @@ void print_arr(long *ptr, unsigned size){
 }
 
 int main(){
+    unsigned seed = 0;
+    default_random_engine rng(seed);
+    uniform_int_distribution<int> ds(-20'000'000, 0);
     unsigned len[] = {500, 1'000, 6'000,  10'000, 40'000, 100'000, 350'000, 500'000, 700'000, 1'000'000};
     long times_lin[10] = {0};
     long times_bin[10]={0};
@@ -44,7 +47,7 @@ int main(){
         int *second = create_array(N);
         auto begin_lin = chrono::steady_clock::now();
         for (unsigned cnt = 100'000;  cnt>0; --cnt){
-            s_lin(first, N, 2'000'000);
+            s_lin(first, N, ds(rng));
         } 
         auto end_lin = chrono::steady_clock::now();
         auto time_lin = chrono::duration_cast<chrono::milliseconds>(end_lin - begin_lin);
@@ -52,7 +55,7 @@ int main(){
         delete_array(first);
         auto begin_bin = chrono::steady_clock::now();
          for (unsigned cnt = 1'000'000; cnt>0; --cnt){
-            s_binary(second, N, 2'000'000);
+            s_binary(second, N, ds(rng));
         }
         auto end_bin = chrono::steady_clock::now();
         auto time_bin = chrono::duration_cast<chrono::milliseconds>(end_bin - begin_bin);

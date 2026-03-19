@@ -25,10 +25,10 @@ void sort_arr(int *ptr, unsigned size){
         }
     }
 }
-int *create_array(unsigned N){
-    int *ptr = new int[N];
-    for(unsigned i=0; i<N;++i){
-        ptr[i]=i;
+int *create_array(unsigned n){
+    int *ptr = new int[n];
+    for(unsigned i = 0; i<n;++i){
+        ptr[i]=-n/2+i;
     }
     return ptr;
 }
@@ -84,13 +84,13 @@ int main(){
         times_s_bin_r[i] = time_s_bin_r.count();
         delete_array(second); 
         int *third = create_array(N); 
-      /*  auto begin_s_lin = chrono::steady_clock::now();
+       auto begin_s_lin = chrono::steady_clock::now();
         for (unsigned cnt = 100'000;  cnt>0; --cnt){
             s_lin(first, N, ds(rng));
         } 
         auto end_s_lin = chrono::steady_clock::now();
         auto time_s_lin = chrono::duration_cast<chrono::milliseconds>(end_s_lin - begin_s_lin);
-        times_s_lin[i] = time_s_lin.count(); */
+        times_s_lin[i] = time_s_lin.count(); 
         delete_array(first);
         auto begin_s_bin_nr = chrono::steady_clock::now();
          for (unsigned cnt = 1'000'000; cnt>0; --cnt){
@@ -98,7 +98,7 @@ int main(){
         }
         auto end_s_bin_nr = chrono::steady_clock::now();
         auto time_s_bin_nr = chrono::duration_cast<chrono::milliseconds>(end_s_bin_nr - begin_s_bin_nr);
-        times_s_bin_nr[i] = time_s_bin_nr.count();
+        times_s_bin_nr[i] = time_s_bin_nr.count(); 
         delete_array(third); 
     }
     for(unsigned int i=6; i<10; ++i){
@@ -111,7 +111,7 @@ int main(){
         } 
         auto end_s_lin = chrono::steady_clock::now();
         auto time_s_lin = chrono::duration_cast<chrono::milliseconds>(end_s_lin - begin_s_lin);
-        times_s_lin[i] = time_s_lin.count();
+        times_s_lin[i] = time_s_lin.count(); 
         delete_array(first); 
         auto begin_s_bin_nr = chrono::steady_clock::now();
          for (unsigned cnt = 1'000'000; cnt>0; --cnt){
@@ -121,7 +121,7 @@ int main(){
         auto time_s_bin_nr = chrono::duration_cast<chrono::milliseconds>(end_s_bin_nr - begin_s_bin_nr);
         times_s_bin_nr[i] = time_s_bin_nr.count();
         delete_array(third); 
-    }
+    } 
     cout<<"Время (мс) s_lin для среднего случая на 100'000 запусков для длин 500, 1'000, 6'000,  10'000, 40'000, 100'000, 350'000, 500'000, 700'000, 1'000'0000 соответственно:"<<endl;
     print_arr(times_s_lin, 10);
     cout<<endl; 

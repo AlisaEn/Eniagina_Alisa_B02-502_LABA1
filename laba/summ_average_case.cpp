@@ -26,8 +26,8 @@ void sort_arr(int *ptr, unsigned size){
 }
 int *create_array(unsigned n){
     int *ptr = new int[n];
-    for(unsigned i=0; i<n;++i){
-        ptr[i]=i;
+    for(unsigned i = 0; i<n;++i){
+        ptr[i]=-n/2+i;
     }
     return ptr;
 }

@@ -19,13 +19,7 @@ void print_arr(long *ptr, unsigned size){
     for(unsigned i=0; i<size-1; ++i) cout<<ptr[i]<<", ";
     cout<<ptr[size-1]<<endl;
 }
-int *create_array(unsigned N){
-    int *ptr = new int[N];
-    for(unsigned i=0; i<N;++i){
-        ptr[i]=i;
-    }
-    return ptr;
-}
+
 
 int *generate_array(unsigned int N, default_random_engine& rng){
     uniform_int_distribution<int> dstr(-10'000'000, 10'000'000);
