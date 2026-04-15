@@ -67,22 +67,25 @@ int main(){
     long times_sqr[10]={0};
     long times_linear_r[6]={0};
     long times_linear_nr[10]={0};
-    for (unsigned i = 0; i<6; ++i){
+    for (unsigned i = 0; i<10; ++i){
         unsigned N = len[i];
         int *first = generate_array(N, rng);
-        int *second =new int[N];
-        for(unsigned j=0; j<N; ++j){
-            second[j] = first[j];
+        if(i<6){
+            int *second =new int[N];
+            for(unsigned j=0; j<N; ++j){
+                second[j] = first[j];
+            } 
+            sort_arr(second, N); 
+            auto begin_linear_r = chrono::steady_clock::now();
+            for (unsigned cnt = 10'000; cnt>0; --cnt){
+                sum_linear(second, N, ds(rng));
+            }
+            auto end_linear_r = chrono::steady_clock::now();
+            auto time_linear_r = chrono::duration_cast<chrono::milliseconds>(end_linear_r - begin_linear_r);
+            times_linear_r[i] = time_linear_r.count();
+            delete_array(second);
+        
         } 
-        sort_arr(second, N); 
-        auto begin_linear_r = chrono::steady_clock::now();
-         for (unsigned cnt = 10'000; cnt>0; --cnt){
-            sum_linear(second, N, ds(rng));
-        }
-        auto end_linear_r = chrono::steady_clock::now();
-        auto time_linear_r = chrono::duration_cast<chrono::milliseconds>(end_linear_r - begin_linear_r);
-        times_linear_r[i] = time_linear_r.count();
-        delete_array(second); 
         int *third = create_array(N); 
         auto begin_sqr = chrono::steady_clock::now();
         for (unsigned cnt = 1'000;  cnt>0; --cnt){
@@ -101,27 +104,7 @@ int main(){
         times_linear_nr[i] = time_linear_nr.count();
         delete_array(third); 
     }
-    for(unsigned int i=6; i<10; ++i){
-        unsigned N = len[i];
-        int *first = generate_array(N, rng);
-        int *third = create_array(N); 
-        auto begin_sqr = chrono::steady_clock::now();
-        for (unsigned cnt = 1'000;  cnt>0; --cnt){
-            sum_sqr(first, N, ds(rng));
-        } 
-        auto end_sqr = chrono::steady_clock::now();
-        auto time_sqr = chrono::duration_cast<chrono::milliseconds>(end_sqr - begin_sqr);
-        times_sqr[i] = time_sqr.count();
-        delete_array(first);
-        auto begin_linear_nr = chrono::steady_clock::now();
-         for (unsigned cnt = 10'000; cnt>0; --cnt){
-            sum_linear(third, N, ds(rng));
-        }
-        auto end_linear_nr = chrono::steady_clock::now();
-        auto time_linear_nr = chrono::duration_cast<chrono::milliseconds>(end_linear_nr - begin_linear_nr);
-        times_linear_nr[i] = time_linear_nr.count();
-        delete_array(third); 
-    }
+    
     cout<<"Время (мс) sum_sqr для среднего случая на 1'000 запусков для длин 500, 1'000, 6'000,  10'000, 40'000, 100'000, 350'000,500'000,  700'000, 1'000'0000 соответственно:"<<endl;
     print_arr(times_sqr, 10);
     cout<<endl;
