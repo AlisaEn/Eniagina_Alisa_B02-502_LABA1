@@ -179,7 +179,7 @@ void print_grid(const Grid<T, N>& g) {
     }
     std::cout << "[ ";
     for (unsigned i = 0; i < g.get_m_size(); ++i) {
-        print_grid(g[i]); // Рекурсивно печатаем подсетки
+        print_grid(g[i]); 
     }
     std::cout << " ]";
 }
@@ -190,7 +190,8 @@ int main(){
     assert(2.0f==g2(1,1));
     g2= g3[1]; 
     assert(1.0f==g2(1,1));
-    //std::cout<<"Everything is ok"<<std::endl;
+    std::cout<<"конструктор с заданным значением, Индексирование () и [] ok"<<std::endl;
+
     Grid<float, 3> grid(2, 2, 3, 5.5f);
 
     std::cout << "\n Конструктор со значением по умолчанию:" << '\n';
