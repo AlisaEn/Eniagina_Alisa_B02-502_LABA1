@@ -11,7 +11,7 @@ private:
     size_type m_size=0;
     void copy_data(SubGrid* const other_data){ //if data is empty, size одинаковы
         for(size_type i = 0; i<m_size; i++){
-            data[i] = other_data[i];
+            data[i] = other_data[i]; //т.к. реализован копирующий оператор для  N=1, по индукции для всех размерностей ок
         }
     }
     void swap_g(Grid<T, N> &other) noexcept{ //перемещение
@@ -56,19 +56,21 @@ public:
     Grid(T const &t):  data(new SubGrid[1]), m_size(1){ //неявное преобразование типов
         data[0] = SubGrid(t);
     }
-    const SubGrid& operator[](size_type idx) const { return data[idx]; }
-    SubGrid& operator[](size_type idx) { return data[idx]; }
+    const SubGrid& operator[](size_type idx) const { return data[idx]; } // неизмен. []
+
+    SubGrid& operator[](size_type idx) { return data[idx]; } // измен. []
+
     template <typename... Args>
-     const T& operator()(size_type first_idx, Args... other_idx) const { 
+    const T& operator()(size_type first_idx, Args... other_idx) const {  // неизмен.()
         return data[first_idx](other_idx...);
     }
     template <typename... Args>
-    T&operator()(size_type first_idx, Args... other_idx) {
+    T&operator()(size_type first_idx, Args... other_idx) {//измен.()
         return data[first_idx](other_idx...);
     }
-    Grid<T, N>&operator=(T const &t) {
+    Grid<T, N>&operator=(T const &t) { // заполнение элементом t
         for (size_type i =0; i<m_size; i++){
-            data[i] = t;
+            data[i] = t; //по индукции неявное преобразование
         }
         return *this;
     }
@@ -183,6 +185,8 @@ void print_grid(const Grid<T, N>& g) {
     }
     std::cout << " ]";
 }
+
+
 int main(){
     Grid<float, 3> const g3(2, 3, 4, 1.0f); //конструктор с заданным значением
     assert(1.0f==g3(1,1,1)); //Индексирование () и []
@@ -196,11 +200,11 @@ int main(){
 
     std::cout << "\n Конструктор со значением по умолчанию:" << '\n';
     Grid<float, 3> grid2(2, 1, 2);
-    print_grid(g2);
+    print_grid(grid2);
 
     std::cout << "\nНеявное преобразование типов :" << '\n';
     Grid<char, 3> grid3 = 'a';
-    print_grid(g3);
+    print_grid(grid3);
 
     std::cout << "\n Конструктор копирования:" << '\n';
     Grid<float, 3> grid4 = grid;
@@ -213,11 +217,11 @@ int main(){
         std::cout << "\ngrid3 очищен -> конструктор перемещения работает корректно" << std::endl;
     }
 
-    std::cout << "\n Оператор копирующего присваивания:" << '\n';
+    std::cout << "\n Копирующий оператор:" << '\n';
     grid2 = grid;
     print_grid(grid2);
 
-    std::cout << "\n Оператор перемещения" << '\n';
+    std::cout << "\n Оператор перемещения grid5 = std::move(grid6);" << '\n';
     Grid<char, 3> grid6(2, 2, 2, 'b');
     grid5 = std::move(grid6);
     std::cout << "\ngrid5 после перемещения:\n";
