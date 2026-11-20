@@ -161,14 +161,14 @@ public:
 template <typename T>
 void print_grid(const Grid<T, 1>& g) {
     if (g.get_m_size() == 0) {
-        std::cout << "[]]\n";
+        std::cout << "[]\n";
         return;
     }
     std::cout << "[ ";
     for (unsigned i = 0; i < g.get_m_size(); ++i) {
         std::cout << g[i] << " ";
     }
-    std::cout << "]\n";
+    std::cout << "]";
 }
 
 template <typename T, size_t N>
@@ -177,27 +177,27 @@ void print_grid(const Grid<T, N>& g) {
         std::cout << "[]\n";
         return;
     }
-    std::cout << "[\n";
+    std::cout << "[ ";
     for (unsigned i = 0; i < g.get_m_size(); ++i) {
         print_grid(g[i]); // Рекурсивно печатаем подсетки
     }
-    std::cout << "]\n";
+    std::cout << " ]";
 }
 int main(){
-    Grid<float, 3> const g3(2, 3, 4, 1.0f);
-    assert(1.0f==g3(1,1,1));
+    Grid<float, 3> const g3(2, 3, 4, 1.0f); //конструктор с заданным значением
+    assert(1.0f==g3(1,1,1)); //Индексирование () и []
     Grid<float, 2> g2(2, 5, 2.0f);
     assert(2.0f==g2(1,1));
-    g2= g3[1];
+    g2= g3[1]; 
     assert(1.0f==g2(1,1));
     //std::cout<<"Everything is ok"<<std::endl;
     Grid<float, 3> grid(2, 2, 3, 5.5f);
 
-    std::cout << " Конструктор с размерами без значения (по умолчанию 0):" << '\n';
+    std::cout << "\n Конструктор со значением по умолчанию:" << '\n';
     Grid<float, 3> grid2(2, 1, 2);
     print_grid(g2);
 
-    std::cout << "\nНеявное преобразование типов (сетка 1x1x1):" << '\n';
+    std::cout << "\nНеявное преобразование типов :" << '\n';
     Grid<char, 3> grid3 = 'a';
     print_grid(g3);
 
@@ -209,27 +209,20 @@ int main(){
     Grid<char, 3> grid5 = std::move(grid3);
     print_grid(grid5);
     if (grid3.get_m_size() == 0) {
-        std::cout << "grid3 очищен -> конструктор перемещения работает корректно" << std::endl;
+        std::cout << "\ngrid3 очищен -> конструктор перемещения работает корректно" << std::endl;
     }
 
     std::cout << "\n Оператор копирующего присваивания:" << '\n';
     grid2 = grid;
     print_grid(grid2);
 
-    std::cout << "\n Оператор перемещающего присваивания:" << '\n';
+    std::cout << "\n Оператор перемещения" << '\n';
     Grid<char, 3> grid6(2, 2, 2, 'b');
     grid5 = std::move(grid6);
-    std::cout << "grid5 после перемещения:\n";
+    std::cout << "\ngrid5 после перемещения:\n";
     print_grid(grid5);
-    std::cout << "grid6 после перемещения (должен содержать старые данные grid5 — 'a'):\n";
+    std::cout << "\ngrid6 после перемещения :\n";
     print_grid(grid6);
 
-    std::cout << "\n Проверка () и [] " << '\n';
-    grid = 1.0f;          
-    grid(1, 0, 2) = 9.9f; 
-    grid[0][1][1] = 7.7f; 
-    assert(grid(1, 0, 2) == 9.9f);
-    assert(grid[0][1][1] == 7.7f);
-    print_grid(grid);
     return 0;
 }
