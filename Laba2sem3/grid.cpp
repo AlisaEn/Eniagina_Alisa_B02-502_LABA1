@@ -21,8 +21,9 @@ private:
     }
 public:
     Grid(T*data, size_type y_size, size_type x_size): data(data), y_size(y_size), x_size(x_size) {}
-    Grid(Grid<T> const & other){ //Копирующий конструктор
-        if(other.data!= nullptr){
+
+    Grid(Grid<T> const & other)  { //Копирующий конструктор
+        if(other.data != nullptr){
             y_size = other.y_size;
             x_size = other.x_size;
             data = new T[y_size*x_size];
@@ -48,9 +49,14 @@ public:
     Grid(T const &t):  data(new T[1]), y_size(1), x_size(1){ //неявное преобразование типов
         data[0] = t;
     }
-    //Далее второй и третий дополнительный конструкторы в одном
-    Grid(size_type y_size, size_type x_size, T const &t = T{}): data(new T[y_size*x_size]), 
-                                                                y_size(y_size), x_size(x_size){
+    //Конструктор по 2-м параметрам
+    Grid(size_type y_size, size_type x_size): data(new T[x_size*y_size]) , y_size(y_size), x_size(x_size){
+        for(size_type i =0; i<y_size*x_size; i++){
+            data[i] = T();
+        }
+    }
+    //Конструктор по 3-м параметрам
+    Grid(size_type y_size, size_type x_size, T const &t): data(new T[x_size*y_size]) , y_size(y_size), x_size(x_size){
         for(size_type i =0; i<y_size*x_size; i++){
             data[i] = t;
         }
@@ -82,6 +88,7 @@ public:
     }
  
  };
+
  template<typename T>
 void print_grid(Grid<T> const& g){
     if(std::is_arithmetic_v<T>){
@@ -96,6 +103,16 @@ void print_grid(Grid<T> const& g){
     }
     
 }
+
+class UnDefault {
+private:
+    char field;
+public:
+    UnDefault(char value): field(value){}
+    friend std::ostream& operator<<(std::ostream& out, UnDefault const& obj) {
+        return out << obj.field;
+    }
+};
 int main(){
     Grid<float> g(3, 2, 0.0f); //конструктор по 3-м параметрам
     assert(3==g.get_y_size());
@@ -141,6 +158,20 @@ int main(){
     g5 = std::move(g6);
     print_grid(g5);
     print_grid(g6);
+//Доп. тест
+
+    char ex_c = char();
+    std::cout<<"test"<<ex_c<<"test"<<std::endl;
+    Grid<char> g_ch3(2, 3, 'c');
+    print_grid(g_ch3);
+    Grid<char> g_ch4(2, 3);
+    //Grid<char> g_ch5();
+   // std::cout<<"ok";
+    UnDefault un('t');
+    Grid<UnDefault> g_un(1, 2, un);
+    print_grid(g_un);
     return 0;
 
 }
+// move без noexcept
+// UnDefault

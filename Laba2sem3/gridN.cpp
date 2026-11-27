@@ -78,6 +78,7 @@ public:
     ~Grid(){
         delete[] data;
     }
+    SubGrid* get_data() const{return data};
  };
 
 template<typename T>
